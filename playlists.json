@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Favoritos",
+    "description": "Tus canciones favoritas",
+    "songs": [],
+    "created": "2026-02-03T02:31:37.288472",
+    "cover": "/static/favorites-cover.png"
+  },
+  {
+    "id": 2,
+    "name": "Recientes",
+    "description": "Canciones agregadas recientemente",
+    "songs": [],
+    "created": "2026-02-03T02:31:37.288494",
+    "cover": "/static/recent-cover.png"
+  }
+]
