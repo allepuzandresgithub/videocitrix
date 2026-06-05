@@ -77,16 +77,17 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-4. Configura las variables de entorno (importante)
-Crea un archivo setup.db en la raíz del proyecto con este contenido (ajusta los valores):
-```bash
-SECRET_KEY=una_clave_segura
+### 4. Configura las variables de entorno (importante)
+
+Crea un archivo **`.env`** en la raíz del proyecto con el siguiente contenido (ajusta los valores si es necesario):
+
+```env
 DB_HOST=localhost
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
-DB_NAME=videocitrix
-PORT=<port>
-DEBUG=False
+DB_ROOT_USER=root
+DB_ROOT_PASSWORD=
+DB_NAME=videocloud
+DB_APP_USER=videocloud
+DB_APP_PASSWORD=mivideopass
 ```
 5. Inicializa la base de datos
 ```bash
