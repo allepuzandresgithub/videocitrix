@@ -56,7 +56,46 @@ A diferencia de plataformas como YouTube o Vimeo, **no hay algoritmos que te emp
 
 Sigue estos pasos si quieres ejecutar tu propia instancia de VideoCitrix.
 
+
 ### 1. Clona el repositorio
 ```bash
 git clone https://github.com/allepuzandresgithub/videocitrix.git
 cd videocitrix
+```
+2. Crea y activa un entorno virtual
+```bash
+# Linux/macOS
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Windows
+python -m venv .venv
+.venv\Scripts\activate
+```
+3. Instala dependencias
+```bash
+pip install -r requirements.txt
+```
+
+4. Configura las variables de entorno (importante)
+Crea un archivo setup.db en la raíz del proyecto con este contenido (ajusta los valores):
+```bash
+SECRET_KEY=una_clave_segura
+DB_HOST=localhost
+DB_USER=tu_usuario
+DB_PASSWORD=tu_contraseña
+DB_NAME=videocitrix
+PORT=<port>
+DEBUG=False
+```
+5. Inicializa la base de datos
+```bash
+python setup_db.py --init
+```
+6. Ejecuta el servidor
+```bash
+python app.py
+# o si tienes el script de inicio:
+bash start_server.sh
+```
+
