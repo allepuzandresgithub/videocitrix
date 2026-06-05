@@ -1,16 +1,38 @@
-# db.py
+# db.py - Funciones de base de datos.
+# Lee todas las credenciales desde variables de entorno (o desde .env si existe).
+# No contiene valores por defecto inseguros.
+
+import os
+import sys
 import mysql.connector
 from mysql.connector import Error
 import bcrypt
 from datetime import datetime
 
-DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'videocloud',
-    'password': 'mivideopass',
-    'database': 'videocloud'
-}
+# Intentar cargar .env si existe (útil en desarrollo)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()  # No sobreescribe variables del sistema ya definidas
+except ImportError:
+    # Si no está instalado, seguir sin él
+    pass
+except Exception:
+    pass
 
+def required_env(name):
+    """Obtiene variable de entorno o termina el programa si no existe."""
+    value = os.getenv(name)
+    if value is None:
+        sys.exit(f"❌ Error crítico: Variable de entorno {name} no definida. Revisa tu archivo .env o configura la variable en el sistema.")
+    return value
+
+# Configuración desde variables de entorno (obligatorias, sin fallbacks)
+DB_CONFIG = {
+    'host': required_env("DB_HOST"),
+    'user': required_env("DB_APP_USER"),
+    'password': required_env("DB_APP_PASSWORD"),
+    'database': required_env("DB_NAME")
+}
 
 def get_db_connection():
     try:
@@ -19,6 +41,9 @@ def get_db_connection():
         print(f"Error conectando a MySQL: {e}")
         return None
 
+# ------------------------------------------------------------
+# Funciones de negocio (sin cambios, solo usan get_db_connection)
+# ------------------------------------------------------------
 
 def create_user(username, email, password):
     conn = get_db_connection()
@@ -40,7 +65,6 @@ def create_user(username, email, password):
     finally:
         cursor.close()
         conn.close()
-
 
 def authenticate_user(username_or_email, password):
     conn = get_db_connection()
@@ -65,7 +89,6 @@ def authenticate_user(username_or_email, password):
         return user
     return None
 
-
 def get_user_by_id(user_id):
     conn = get_db_connection()
     if not conn:
@@ -79,7 +102,6 @@ def get_user_by_id(user_id):
     cursor.close()
     conn.close()
     return user
-
 
 def get_all_users():
     conn = get_db_connection()
@@ -98,7 +120,6 @@ def get_all_users():
                 u[key] = u[key].isoformat()
     return users
 
-
 def delete_user(user_id):
     conn = get_db_connection()
     if not conn:
@@ -110,7 +131,6 @@ def delete_user(user_id):
     cursor.close()
     conn.close()
     return affected > 0
-
 
 def update_user_role(user_id, role):
     if role not in ('user', 'admin'):
@@ -125,7 +145,6 @@ def update_user_role(user_id, role):
     conn.close()
     return True
 
-
 def update_user_avatar(user_id, avatar_url):
     conn = get_db_connection()
     if not conn:
@@ -136,7 +155,6 @@ def update_user_avatar(user_id, avatar_url):
     cursor.close()
     conn.close()
     return True
-
 
 def update_user_password(user_id, new_password):
     conn = get_db_connection()
